@@ -170,6 +170,13 @@ def evaluate(
     # Returns
         A dict mapping class names to mAP scores.
     """
+    if save_path is None:
+        try:
+            os.mkdir('Validation_Results/')
+        except:
+            pass
+        finally:
+            save_path = 'Validation_Results/'
     # gather all detections and annotations
     all_detections, all_inferences = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=None)
     all_annotations    = _get_annotations(generator)
