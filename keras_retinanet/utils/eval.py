@@ -231,7 +231,7 @@ def evaluate(
                         true_positives  = np.append(true_positives, 0)
                         draw_box(image1,image_boxes1,color=(0,0,255))
                         draw_caption(image1,image_boxes1,'FP:'+str(round(image_scores1,2)))
-            cv2.imwrite(os.path.join(save_path, '{}.jpg'.format(generator.image_names[i])), image1) 
+    cv2.imwrite(os.path.join(save_path, '{}.jpg'.format(generator.image_names[i])), image1) 
 
         # no annotations -> AP for this class is 0 (is this correct?)
         if num_annotations == 0:
