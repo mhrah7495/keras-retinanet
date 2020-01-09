@@ -207,6 +207,7 @@ def evaluate(
             
             for d in detections:
                 image_boxes1 = d
+                image_scores1 = d[4]
                 scores = np.append(scores, d[4])
 
                 if annotations.shape[0] == 0:
