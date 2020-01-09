@@ -109,7 +109,7 @@ def _get_detections(generator, model, score_threshold=0.5, max_detections=100, s
             draw_annotations(raw_image, generator.load_annotations(i), label_to_name=generator.label_to_name)
             draw_detections(raw_image, image_boxes, image_scores, image_labels, label_to_name=generator.label_to_name, score_threshold=score_threshold)
 
-            cv2.imwrite(os.path.join(save_path, '{}.png'.format(i)), raw_image)
+            cv2.imwrite(os.path.join(save_path, '{}.png'.format(generator.image_names[i])), raw_image)
 
         # copy detections to all_detections
         for label in range(generator.num_classes()):
@@ -178,7 +178,7 @@ def evaluate(
         finally:
             save_path = 'Validation_Results/'
     # gather all detections and annotations
-    all_detections, all_inferences = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=None)
+    all_detections, all_inferences = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path)
     all_annotations    = _get_annotations(generator)
     average_precisions = {}
 
@@ -223,15 +223,13 @@ def evaluate(
                     false_positives = np.append(false_positives, 0)
                     true_positives  = np.append(true_positives, 1)
                     detected_annotations.append(assigned_annotation)
-                    draw_box(image1,image_boxes1,color=(0,255,0))
-                    draw_caption(image1,image_boxes1,'TP:'+str(round(image_scores1,2)))
+
                 else:
                     if image_scores1 >= iou_threshold :
                         false_positives = np.append(false_positives, 1)
                         true_positives  = np.append(true_positives, 0)
-                        draw_box(image1,image_boxes1,color=(0,0,255))
-                        draw_caption(image1,image_boxes1,'FP:'+str(round(image_scores1,2)))
-    cv2.imwrite(os.path.join(save_path, '{}.jpg'.format(generator.image_names[i])), image1) 
+
+
 
         # no annotations -> AP for this class is 0 (is this correct?)
         if num_annotations == 0:
