@@ -195,8 +195,11 @@ def evaluate(
             annotations          = all_annotations[i][label]
             num_annotations     += annotations.shape[0]
             detected_annotations = []
-
+            image1 = generator.load_image(i)
+            draw_annotations(image1, generator.load_annotations(i))
+            
             for d in detections:
+                image_boxes1 = d
                 scores = np.append(scores, d[4])
 
                 if annotations.shape[0] == 0:
@@ -212,9 +215,15 @@ def evaluate(
                     false_positives = np.append(false_positives, 0)
                     true_positives  = np.append(true_positives, 1)
                     detected_annotations.append(assigned_annotation)
+                    draw_box(image1,image_boxes1,color=(0,255,0))
+                    draw_caption(image1,image_boxes1,'TP:'+str(round(image_scores1,2)))
                 else:
-                    false_positives = np.append(false_positives, 1)
-                    true_positives  = np.append(true_positives, 0)
+                    if image_scores1 >= iou_threshold :
+                        false_positives = np.append(false_positives, 1)
+                        true_positives  = np.append(true_positives, 0)
+                        draw_box(image1,image_boxes1,color=(0,0,255))
+                        draw_caption(image1,image_boxes1,'FP:'+str(round(image_scores1,2)))
+             cv2.imwrite(os.path.join(save_path, '{}.jpg'.format(generator.image_path(i)[5:(len(generator.image_path(i))-4)])), image1) 
 
         # no annotations -> AP for this class is 0 (is this correct?)
         if num_annotations == 0:
