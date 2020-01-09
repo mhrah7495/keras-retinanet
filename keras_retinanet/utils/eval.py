@@ -56,7 +56,7 @@ def _compute_ap(recall, precision):
     return ap
 
 
-def _get_detections(generator, model, score_threshold=0.05, max_detections=100, save_path=None):
+def _get_detections(generator, model, score_threshold=0.5, max_detections=100, save_path=None):
     """ Get the detections from the model using the generator.
 
     The result is a list of lists such that the size is:
@@ -154,7 +154,7 @@ def evaluate(
     generator,
     model,
     iou_threshold=0.5,
-    score_threshold=0.05,
+    score_threshold=0.5,
     max_detections=100,
     save_path=None
 ):
@@ -171,7 +171,7 @@ def evaluate(
         A dict mapping class names to mAP scores.
     """
     # gather all detections and annotations
-    all_detections, all_inferences = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=save_path)
+    all_detections, all_inferences = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections, save_path=None)
     all_annotations    = _get_annotations(generator)
     average_precisions = {}
 
